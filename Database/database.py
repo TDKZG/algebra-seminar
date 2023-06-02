@@ -1,7 +1,7 @@
 # Database/database.py
 
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine
-from sqlalchemy.orm import relationship, Session
+from sqlalchemy.orm import relationship, Session, joinedload
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -76,5 +76,5 @@ def db_login(korisnicko_ime, lozinka):
 
 def db_user_pots(korisnik):
     with Session(db_engine) as session:
-        user_pots = session.query(Posuda).filter(Posuda.korisnik_id == korisnik.id).all()
+        user_pots = session.query(Posuda).filter(Posuda.korisnik_id == korisnik.id).options(joinedload(Posuda.biljka)).all()
         return user_pots
